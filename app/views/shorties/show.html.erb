@@ -1,0 +1,25 @@
+<%- model_class = Shorty -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:actual_url) %>:</strong></dt>
+  <dd><%= @shorty.actual_url %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:shortened_url) %>:</strong></dt>
+  <dd><%= BASE_URL+@shorty.shortened_url %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:alias) %>:</strong></dt>
+  <dd><%= @shorty.alias.blank? ? "--" : BASE_URL+URI::escape(@shorty.alias) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:hits) %>:</strong></dt>
+  <dd><%= @shorty.hits %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              shorties_path, :class => 'btn'  %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              shorty_path(@shorty),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

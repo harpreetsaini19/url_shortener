@@ -1,0 +1,31 @@
+<%= form_for @shorty, :html => { :class => 'form-horizontal' } do |f| %>
+  <% if @shorty.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      The form contains <%= pluralize(@shorty.errors.count, "error") %>.
+    </div>
+    <ul>
+    <% @shorty.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <div class="control-group">
+    <%= f.label :actual_url, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :actual_url, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :alias,'Alias (optional)', :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :alias, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                shorties_path, :class => 'btn' %>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+module ShortiesHelper
+end

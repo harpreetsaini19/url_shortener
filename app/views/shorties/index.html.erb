@@ -1,0 +1,36 @@
+<%- model_class = Shorty -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th class='span4'><%= model_class.human_attribute_name(:actual_url) %></th>
+      <th class='span3'><%= model_class.human_attribute_name(:shortened_url) %></th>
+      <th class='span3'><%= model_class.human_attribute_name(:alias) %></th>
+      <th class='span2'><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shorties.each do |shorty| %>
+      <tr>
+        <td><%= shorty.actual_url %></td>
+        <td><%= BASE_URL+shorty.shortened_url %></td>
+        <td><%= shorty.alias.blank? ? "--" : BASE_URL+URI::escape(shorty.alias)%></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      shorty_path(shorty),:class => 'btn btn-mini'%>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      shorty_path(shorty),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_shorty_path,
+            :class => 'btn btn-primary' %>
