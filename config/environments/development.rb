@@ -1,7 +1,6 @@
 UrlShortner::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  BASE_URL = "http://"+Socket.gethostname+":"+Rails::Server.new.options[:Port].to_s+"/" rescue nil
   KEY_LENGTH = 3
 
   # In the development environment your application's code is reloaded on

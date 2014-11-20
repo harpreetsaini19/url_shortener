@@ -7,9 +7,9 @@
   <dt><strong><%= model_class.human_attribute_name(:actual_url) %>:</strong></dt>
   <dd><%= @shorty.actual_url %></dd>
   <dt><strong><%= model_class.human_attribute_name(:shortened_url) %>:</strong></dt>
-  <dd><%= BASE_URL+@shorty.shortened_url %></dd>
+  <dd><%= @base_url+@shorty.shortened_url %></dd>
   <dt><strong><%= model_class.human_attribute_name(:alias) %>:</strong></dt>
-  <dd><%= @shorty.alias.blank? ? "--" : BASE_URL+URI::escape(@shorty.alias) %></dd>
+  <dd><%= @shorty.alias.blank? ? "--" : @base_url+URI::escape(@shorty.alias) %></dd>
   <dt><strong><%= model_class.human_attribute_name(:hits) %>:</strong></dt>
   <dd><%= @shorty.hits %></dd>
 </dl>

@@ -15,8 +15,8 @@
     <% @shorties.each do |shorty| %>
       <tr>
         <td><%= shorty.actual_url %></td>
-        <td><%= BASE_URL+shorty.shortened_url %></td>
-        <td><%= shorty.alias.blank? ? "--" : BASE_URL+URI::escape(shorty.alias)%></td>
+        <td><%= @base_url+shorty.shortened_url %></td>
+        <td><%= shorty.alias.blank? ? "--" : @base_url+URI::escape(shorty.alias)%></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       shorty_path(shorty),:class => 'btn btn-mini'%>
