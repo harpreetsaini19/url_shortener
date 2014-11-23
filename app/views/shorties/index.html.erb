@@ -1,11 +1,15 @@
 <%- model_class = Shorty -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+            new_shorty_path,
+            :class => 'btn btn-primary' %>
 </div>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th class='span4'><%= model_class.human_attribute_name(:actual_url) %></th>
+      <th class='span1'>Used At</th>
+      <th class='span3'><%= model_class.human_attribute_name(:actual_url) %></th>
       <th class='span3'><%= model_class.human_attribute_name(:shortened_url) %></th>
       <th class='span3'><%= model_class.human_attribute_name(:alias) %></th>
       <th class='span2'><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -14,12 +18,24 @@
   <tbody>
     <% @shorties.each do |shorty| %>
       <tr>
+        <td><%= shorty.updated_at.strftime("%H:%M %d/%m/%y") %></td>
         <td><%= shorty.actual_url %></td>
-        <td><%= @base_url+shorty.shortened_url %></td>
+        <% if shorty.bookmark %>
+          <td><%= @base_url+shorty.shortened_url %> <span class="badge">Bookmarked</span></td>
+        <%else%>
+          <td><%= @base_url+shorty.shortened_url %></td>
+        <%end%>
         <td><%= shorty.alias.blank? ? "--" : @base_url+URI::escape(shorty.alias)%></td>
         <td>
-          <%= link_to t('.show', :default => t("helpers.links.show")),
-                      shorty_path(shorty),:class => 'btn btn-mini'%>
+          <%= link_to t('.show', :default => t("helpers.links.details")),
+                      shorty_path(shorty),:class => 'btn btn-mini', 'data-no-turbolink' => true%>
+          <% if shorty.bookmark %>
+            <%= link_to t('.toggle_bookmark', :default => t("helpers.links.unmark")),
+                      toggle_bookmark_path(shorty),:class => 'btn btn-mini btn-warning'%>
+          <% else %>
+            <%= link_to t('.toggle_bookmark', :default => t("helpers.links.mark")),
+                      toggle_bookmark_path(shorty),:class => 'btn btn-mini btn-success'%>
+          <% end %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       shorty_path(shorty),
                       :method => :delete,

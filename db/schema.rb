@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120115930) do
+ActiveRecord::Schema.define(version: 20141123101339) do
+
+  create_table "hits", force: true do |t|
+    t.integer  "shorty_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "shorties", force: true do |t|
     t.string   "shortened_url"
@@ -20,7 +26,7 @@ ActiveRecord::Schema.define(version: 20141120115930) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "alias"
-    t.integer  "hits",          default: 0
+    t.boolean  "bookmark",      default: false
   end
 
   add_index "shorties", ["shortened_url"], name: "index_shorties_on_shortened_url"

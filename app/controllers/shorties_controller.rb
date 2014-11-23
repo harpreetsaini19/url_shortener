@@ -1,10 +1,10 @@
 class ShortiesController < ApplicationController
-  before_action :set_shorty, only: [:show, :destroy, :update]
+  before_action :set_shorty, only: [:show, :destroy, :update, :toggle_bookmark]
 
   # GET /shorties
   # GET /shorties.json
   def index
-    @shorties = Shorty.all.order('updated_at DESC')
+    @shorties = Shorty.all.order('bookmark DESC, updated_at DESC')
   end
 
   # GET /shorties/1
@@ -47,6 +47,8 @@ class ShortiesController < ApplicationController
     end
   end
 
+  # PUT /shorties/1
+  # PUT /shorties/1.json
   def update
     respond_to do |format|
       if @shorty.update(shorty_params)
@@ -61,13 +63,26 @@ class ShortiesController < ApplicationController
 
   def redirect
     @shorty = Shorty.where(shortened_url:params[:link]).first || Shorty.where(alias: URI::unescape(params[:link])).first || not_found
-    @shorty.update(hits:@shorty.hits+1)
-    redirect_to @shorty.actual_url, :status => @shorty.http_status
+    hit = Hit.new
+    hit.shorty_id = @shorty.id
+    hit.save
+    redirect_to @shorty.actual_url, :status => @shorty.http_status and return
   end
 
   def destroy
     @shorty.destroy
     redirect_to shorties_path
+  end
+
+  # GET /shorties/1/toggle_bookmark
+  # GET /shorties/1/toggle_bookmark.json
+  def toggle_bookmark
+    @shorty.bookmark = !@shorty.bookmark
+    @shorty.save
+    respond_to do |format|
+      format.html { redirect_to shorties_path}
+      format.json { render action: 'show', status: :created, location: @shorty }
+    end
   end
 
   private
@@ -78,6 +93,6 @@ class ShortiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shorty_params
-      params.require(:shorty).permit(:actual_url,:alias)
+      params.require(:shorty).permit(:actual_url,:alias,:bookmark)
     end
 end

@@ -1,8 +1,59 @@
+<%
+  present_date = Time.now
+  present_week_start = Time.now.at_beginning_of_week
+  previous_week_start = present_week_start - 1.week
+  present_month_start = Time.now.at_beginning_of_month
+  previous_month_start = present_month_start - 1.month
+%>
+<% content_for :javascript_includes do %>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script>
+    google.load("visualization", "1", {packages:["corechart"]});
+  </script>
+  <script>
+    $(document).ready(function () {
+      google.setOnLoadCallback(drawChart);
+      google.setOnLoadCallback(drawChart1);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Week', 'Hits'],
+          ['This Week',  <%=@shorty.hits.where("created_at > ?", present_week_start).count%>],
+          ['Previous Week',  <%=@shorty.hits.where("created_at between ? and ?", previous_week_start, present_week_start).count%>]
+        ]);
+
+        var options = {
+          title: 'Week Comparision'
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      };
+      function drawChart1() {
+        var data = google.visualization.arrayToDataTable([
+          ['Month', 'Hits'],
+          ['This Month',  <%=@shorty.hits.where("created_at > ?", present_month_start).count%>],
+          ['Previous Month',  <%=@shorty.hits.where("created_at between ? and ?", previous_month_start, present_month_start).count%>]
+        ]);
+
+        var options = {
+          title: 'Month Comparision'
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div1'));
+
+        chart.draw(data, options);
+      };
+    });
+  </script>
+<% end %>
 <%- model_class = Shorty -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
 </div>
-
+<% if @shorty.bookmark %>
+  <span class="badge">Bookmarked</span>
+<% end %>
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:actual_url) %>:</strong></dt>
   <dd><%= @shorty.actual_url %></dd>
@@ -10,10 +61,13 @@
   <dd><%= @base_url+@shorty.shortened_url %></dd>
   <dt><strong><%= model_class.human_attribute_name(:alias) %>:</strong></dt>
   <dd><%= @shorty.alias.blank? ? "--" : @base_url+URI::escape(@shorty.alias) %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:hits) %>:</strong></dt>
-  <dd><%= @shorty.hits %></dd>
+  <dt><strong>Total Hits</strong></dt>
+  <dd><%= @shorty.hits.count %></dd>
 </dl>
-
+<div class="row">
+  <div class="chart span6" id="chart_div"></div>
+  <div class="chart span6" id="chart_div1"></div>
+</div>
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               shorties_path, :class => 'btn'  %>

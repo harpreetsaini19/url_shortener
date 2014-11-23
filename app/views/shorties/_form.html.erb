@@ -23,6 +23,12 @@
       <%= f.text_field :alias, :class => 'text_field' %>
     </div>
   </div>
+  <div class="control-group">
+    <%= f.label :bookmark, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :bookmark, :class => 'checkbox'%>
+    </div>
+  </div>
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
