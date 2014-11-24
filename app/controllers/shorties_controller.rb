@@ -69,9 +69,14 @@ class ShortiesController < ApplicationController
     redirect_to @shorty.actual_url, :status => @shorty.http_status and return
   end
 
+  # DELETE /shorties/1
+  # DELETE /shorties/1.json
   def destroy
     @shorty.destroy
-    redirect_to shorties_path
+    respond_to do |format|
+      format.html  { redirect_to shorties_path }
+      format.json { render json: {success:"Request implemented successfully"},status: :created}
+    end
   end
 
   # GET /shorties/1/toggle_bookmark
