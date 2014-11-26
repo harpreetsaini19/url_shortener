@@ -63,6 +63,7 @@ class ShortiesController < ApplicationController
 
   def redirect
     @shorty = Shorty.where(shortened_url:params[:link]).first || Shorty.where(alias: URI::unescape(params[:link])).first || not_found
+    @shorty.update_attributes(updated_at:Time.now)
     hit = Hit.new
     hit.shorty_id = @shorty.id
     hit.save
