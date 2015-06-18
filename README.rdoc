@@ -14,4 +14,4 @@ An API for accessing the services
 Bookmarks
 Reporting & Statistics
 
-Preview : http://limitless-badlands-4155.herokuapp.com
+Preview : http://url-shorties.herokuapp.com/
