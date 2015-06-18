@@ -14,4 +14,4 @@ An API for accessing the services
 Bookmarks
 Reporting & Statistics
 
-Preview : http://url-shorties.herokuapp.com/
+Preview : http://url-shorties.herokuapp.com
